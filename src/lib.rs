@@ -111,7 +111,7 @@ macro_rules! make_request_spanner {
                 http.request_id = field::Empty,
                 user_agent.original = field::Empty,
                 http.headers = field::Empty,
-                network.protocol.name = "name"
+                network.protocol.name = "http",
                 network.protocol.version = field::Empty,
                 //Optional
                 client.address = field::Empty,
