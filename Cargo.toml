@@ -1,6 +1,6 @@
 [package]
 name = "ohkami-tracing-req"
-version = "0.24.2"
+version = "0.24.3"
 authors = ["Douman <douman@gmx.se>"]
 edition = "2024"
 rust-version = "1.88.0"

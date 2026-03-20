@@ -138,9 +138,13 @@ pub trait MiddlewareCustomization: Clone + Send + Sync + 'static {
     #[inline(always)]
     ///Defines way to extract `IpAddr` from `parts`
     ///
-    ///Defaults to always return `None`, in which case, middleware will attempt to use `Request::ip` unless it is unspecified IP
-    fn extract_client_ip(&self, span: &tracing::Span, parts: &ohkami::Request) -> Option<IpAddr> {
-        None
+    ///Defaults to always return `Request::ip`, if it is not unspecified, otherwise returns `None`
+    fn extract_client_ip(&self, span: &tracing::Span, req: &ohkami::Request) -> Option<IpAddr> {
+        if req.ip.is_unspecified() {
+            None
+        } else {
+            Some(req.ip)
+        }
     }
 
     #[allow(unused)]
@@ -277,8 +281,6 @@ impl<F: ohkami::FangProc, C: MiddlewareCustomization> ohkami::FangProc for Traci
 
         if let Some(client_ip) = self.ctx.customization.extract_client_ip(&span, &req) {
             span.record("client.address", tracing::field::display(client_ip));
-        } else if !req.ip.is_unspecified() {
-            span.record("client.address", tracing::field::display(req.ip));
         }
 
         self.ctx.customization.on_request(&span, &req);
