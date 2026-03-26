@@ -268,8 +268,9 @@ impl<F: ohkami::FangProc, C: MiddlewareCustomization> ohkami::FangProc for Traci
 
         span.record("http.request.method", req.method.as_str());
         span.record("url.path", req.path.str().as_ref());
-        //Need to make PR to provide is_empty() to determine whether query has any value
-        span.record("url.query", tracing::field::debug(&req.query));
+        if !req.query.is_empty() {
+            span.record("url.query", tracing::field::debug(&req.query));
+        }
         //ohkami doesn't suport anything more than HTTP1 so for now assume it is 1.1
         span.record("network.protocol.version", 1.1);
         if !C::INSPECT_HEADERS.is_empty() {

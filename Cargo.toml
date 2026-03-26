@@ -27,5 +27,5 @@ version = "0.1"
 default-features = false
 
 [dependencies.ohkami]
-version = "0.24.7"
+version = "0.24.8"
 default-features = false
